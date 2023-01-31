@@ -2,7 +2,10 @@ import { model, Schema } from 'mongoose';
 import { IUser, UserRole } from '../../core/types';
 
 const UserSchema = new Schema<IUser>({
-  username: String,
+  username: {
+    type: String,
+    unique: true
+  },
   //TODO: don't store password as string
   password: String,
   role: {

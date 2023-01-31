@@ -1,4 +1,4 @@
-import express, { Response, Request } from 'express';
+import express, { Response, Request, NextFunction } from 'express';
 import { expressjwt, Request as JWTRequest} from 'express-jwt';
 import fetch from 'node-fetch';
 
@@ -6,6 +6,8 @@ import { JWT_TOKEN_ALGORITM, JWT_TOKEN_SECRET, RECAPTCHA_SECRET } from '../core/
 import { IUser, UserRole } from '../core/types';
 import { addUser, getUser, getUserById } from '../db/repositories/userRepository';
 import { generateAuthToken } from '../services/authorizationService';
+
+const UNIQUE_CONSTRAINT_ERROR_CODE = 11000;
 
 const authRouter = express.Router();
 
@@ -29,8 +31,8 @@ authRouter.post('/login', async (request: Request, response: Response) => {
   response.json({ token });
 });
 
-authRouter.post('/register', async (request: Request, response: Response) => {
-  const { username, password, recaptchaToken } = request.body;
+const verifyRecaptcha = async (request: Request, response: Response, next: NextFunction) => {
+  const { recaptchaToken } = request.body;
 
   const recaptchaVerificationResponse = await fetch(
     'https://www.google.com/recaptcha/api/siteverify',
@@ -47,11 +49,25 @@ authRouter.post('/register', async (request: Request, response: Response) => {
     return response.status(400).send({error: 'Captcha is not passed, please try again'})
   }
 
-  const user = await addUser({username, password, role: UserRole.USER});
+  next();
+};
 
-  const token = generateAuthToken(user);
-  
-  response.json({ token });
+authRouter.post('/register', verifyRecaptcha, async (request: Request, response: Response) => {
+  const { username, password } = request.body;
+
+  try {
+    const user = await addUser({username, password, role: UserRole.USER});
+
+    const token = generateAuthToken(user);
+    
+    response.json({ token });
+  } catch (err) {
+    if (err?.code === UNIQUE_CONSTRAINT_ERROR_CODE) {
+      return response.status(400).send({ error: 'User with such name already exist!' });
+    }
+
+    return response.status(500).send({error: err.message});
+  }
 });
 
 export default authRouter;

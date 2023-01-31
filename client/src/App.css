@@ -1,0 +1,102 @@
+:root {
+  --primary-color: #ccc;
+  --secondary-color: #a932c7;
+  --bg-color: #282c34;
+}
+
+header {
+  text-align: center;
+}
+
+footer {
+  padding: 20px;
+  text-align: right;
+}
+
+.app {
+  background-color: var(--bg-color);
+  color: var(--primary-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-logo {
+  height: 20vmin;
+  pointer-events: none;
+}
+
+.app-content {
+  text-align: center;
+  margin-top: 40px;
+  flex-grow: 1;
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.app-form {
+  padding: 40px 20px;
+}
+
+input {
+  display: block;
+  margin-bottom: 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--primary-color);
+  padding: 7px 10px;
+  color: var(--primary-color);
+  outline: none;
+  margin-right: 10px;
+  min-width: 200px;
+}
+
+button {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  padding: 7px 15px;
+  cursor: pointer;
+}
+
+button + button {
+  margin-left: 20px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+button:hover {
+  background: rgba(169, 50, 199, 0.7);
+}
+
+h2 {
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+.app-link {
+  color: var(--secondary-color);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.app-link:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 800px) and (orientation: landscape) {
+  .auth-container {
+    flex-direction: row;
+  }
+}

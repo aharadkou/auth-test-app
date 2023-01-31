@@ -1,0 +1,13 @@
+{
+  "name": "auth-test-app-server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:client": "cd ./client && npm install && npm run build",
+    "build:server": "cd ./server && npm install && npm run build",
+    "start:client": "cd ./client && npm run start",
+    "start:server": "cd ./server && npm run start",
+    "build": "npm run build:client && npm run build:server",
+    "start": "npm run start:client & npm run start:server"
+  }
+}

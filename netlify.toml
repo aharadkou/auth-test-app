@@ -1,0 +1,7 @@
+[build]
+    functions="server/dist"
+
+[[redirects]]
+    to="/.netlify/functions/app/api:splat"
+    from="/api/*"
+    status=200

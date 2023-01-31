@@ -19,7 +19,6 @@ export function RegistrationComponent() {
     event.preventDefault();
 
     try {
-      console.log(recaptchaToken);
       if (userName.length < MIN_USERNAME_LENGTH) {
         throw new Error(`Min username length is ${MIN_USERNAME_LENGTH}!`)
       }

@@ -17,9 +17,9 @@ const UserSchema = new Schema<IUser>({
 UserSchema.virtual('id').get(function(){
   return this._id.toHexString();
 });
-
+  
 UserSchema.set('toJSON', {
   virtuals: true
 });
-
+  
 export const UserModel = model('UserModel', UserSchema);

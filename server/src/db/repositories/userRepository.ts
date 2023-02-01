@@ -2,7 +2,7 @@ import { IUser } from '../../core/types';
 import { UserModel } from '../models/userModel';
 
 
-export const addUser = async (userPayload: Partial<IUser>): Promise<IUser> => {
+export const addUser = async (userPayload: Partial<IUser>) => {
   const inserted = await UserModel.collection.insertOne(userPayload);
 
   return UserModel.findById(inserted.insertedId)

@@ -43,7 +43,6 @@ export function RegistrationComponent() {
 
       const { token } = await registrationResponse.json();
 
-
       handleSuccessfulLogin(token);
     } catch(error) {
       toast.error(error.message);

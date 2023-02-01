@@ -6,4 +6,4 @@ export const handleError = async (response: Response) => {
   }
 }
 
-export const handleSuccessfulLogin = (token: string) => window.location.replace(`${COIN_APP_URL}?token=${token}`);
+export const handleSuccessfulLogin = (token: string) => window.location.replace(`${COIN_APP_URL}?token=${encodeURIComponent(token)}`);

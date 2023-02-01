@@ -11,11 +11,11 @@ const UNIQUE_CONSTRAINT_ERROR_CODE = 11000;
 
 const authRouter = express.Router();
 
-authRouter.get('/user-info', expressjwt({ secret: JWT_TOKEN_SECRET, algorithms: [JWT_TOKEN_ALGORITM] })), async (request: JWTRequest, response: Response) => {
+authRouter.get('/user-info', expressjwt({ secret: JWT_TOKEN_SECRET, algorithms: [JWT_TOKEN_ALGORITM] }), async (request: JWTRequest, response: Response) => {
   const jwtPayload = request.auth as Partial<IUser>;
 
   response.json(await getUserById(jwtPayload.id));
-};
+});
 
 authRouter.post('/login', async (request: Request, response: Response) => {
   const { username, password } = request.body;

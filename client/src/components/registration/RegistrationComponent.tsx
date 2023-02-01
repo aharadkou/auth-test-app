@@ -28,7 +28,7 @@ export function RegistrationComponent() {
       }
 
       if (password.length < MIN_PASSWORD_LENGTH) {
-        throw new Error(`Min password length is ${MIN_USERNAME_LENGTH}!`)
+        throw new Error(`Min password length is ${MIN_PASSWORD_LENGTH}!`)
       }
 
       const registrationResponse = await fetch(REGISTER_URL, {

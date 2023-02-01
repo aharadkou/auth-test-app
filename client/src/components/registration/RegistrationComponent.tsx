@@ -85,7 +85,7 @@ export function RegistrationComponent() {
       />
       <button
         className='register-button'
-        disabled={!userName.trim()}
+        disabled={!userName.trim() || isRequestInProgress}
         onClick={(event) => onRegisterClick(event)}
       >Register</button>
     </form>

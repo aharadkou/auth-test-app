@@ -87,17 +87,6 @@ h2 {
   text-transform: uppercase;
 }
 
-.app-link {
-  color: var(--secondary-color);
-  text-decoration: underline;
-  font-weight: 600;
-}
-
-.app-link:hover {
-  text-decoration: none;
-  cursor: pointer;
-}
-
 @media screen and (min-width: 800px) and (orientation: landscape) {
   .auth-container {
     flex-direction: row;

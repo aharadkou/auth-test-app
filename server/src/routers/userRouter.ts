@@ -1,8 +1,8 @@
 import express, { Response } from 'express';
 import { expressjwt, Request as JWTRequest} from 'express-jwt';
-import { JWT_TOKEN_ALGORITM, JWT_TOKEN_SECRET } from '../core/constants';
+import { INVITE_SECRET, JWT_TOKEN_ALGORITM, JWT_TOKEN_SECRET } from '../core/constants';
 import { IUser, UserRole } from '../core/types';
-import { getUsers } from '../db/repositories/userRepository';
+import { addUser, getUsers } from '../db/repositories/userRepository';
 
 const userRouter = express.Router();
 
@@ -14,6 +14,18 @@ userRouter.get('/', expressjwt({ secret: JWT_TOKEN_SECRET, algorithms: [JWT_TOKE
   }
 
   response.json(await getUsers());
+});
+
+userRouter.post('/', async (request: JWTRequest, response: Response) => {
+  const { secret, username, role, password } = request.body;
+
+  if (secret !== INVITE_SECRET) {
+    return response.status(403).send({error: 'No access!'});
+  }
+
+  await addUser({username, role, password});
+
+  response.sendStatus(200);
 });
 
 

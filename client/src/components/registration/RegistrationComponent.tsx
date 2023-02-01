@@ -3,8 +3,8 @@ import ReCAPTCHA from 'react-google-recaptcha-enterprise';
 import { toast } from 'react-toastify';
 
 import './RegistrationComponent.css';
-import { REGISTER_URL } from '../../config';
-import { handleError, handleSuccessfulLogin } from '../../helpers/common';
+import { handleSuccessfulLogin } from '../../helpers/common';
+import { register } from '../../services/authService';
 
 const MIN_USERNAME_LENGTH = 5;
 const MIN_PASSWORD_LENGTH = 8;
@@ -38,17 +38,7 @@ export function RegistrationComponent() {
         throw new Error(`Min password length is ${MIN_PASSWORD_LENGTH}!`)
       }
 
-      const registrationResponse = await fetch(REGISTER_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({username: userName.trim(), password, recaptchaToken}),
-      });
-
-      await handleError(registrationResponse);
-
-      const { token } = await registrationResponse.json();
+      const { token } = await register(userName, password, recaptchaToken);
 
       handleSuccessfulLogin(token);
     } catch(error) {

@@ -1,13 +1,11 @@
-import express, { Response, Request, NextFunction } from 'express';
+import express, { Response, Request } from 'express';
 import { expressjwt, Request as JWTRequest} from 'express-jwt';
-import fetch from 'node-fetch';
 
-import { JWT_TOKEN_ALGORITM, JWT_TOKEN_SECRET, RECAPTCHA_SECRET } from '../core/constants';
+import { JWT_TOKEN_ALGORITM, JWT_TOKEN_SECRET, UNIQUE_CONSTRAINT_ERROR_CODE } from '../core/constants';
 import { IUser, UserRole } from '../core/types';
-import { addUser, getUser, getUserById } from '../db/repositories/userRepository';
+import { verifyRecaptcha } from '../middlewares/verifyRecaptcha';
 import { generateAuthToken } from '../services/authorizationService';
-
-const UNIQUE_CONSTRAINT_ERROR_CODE = 11000;
+import { addUser, getUser, getUserById } from '../services/userService';
 
 const authRouter = express.Router();
 
@@ -30,27 +28,6 @@ authRouter.post('/login', async (request: Request, response: Response) => {
   
   response.json({ token });
 });
-
-const verifyRecaptcha = async (request: Request, response: Response, next: NextFunction) => {
-  const { recaptchaToken } = request.body;
-
-  const recaptchaVerificationResponse = await fetch(
-    'https://www.google.com/recaptcha/api/siteverify',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `secret=${RECAPTCHA_SECRET}&response=${recaptchaToken}`
-    }
-  );
- 
-  const recaptchaVerificationResponseJson = await recaptchaVerificationResponse.json() as { success: boolean };
-
-  if (!recaptchaVerificationResponseJson.success) {
-    return response.status(400).send({error: 'Captcha is not passed, please try again'})
-  }
-
-  next();
-};
 
 authRouter.post('/register', verifyRecaptcha, async (request: Request, response: Response) => {
   const { username, password } = request.body;

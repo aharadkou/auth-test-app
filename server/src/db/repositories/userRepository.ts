@@ -10,12 +10,12 @@ export const addUser = async (userPayload: Partial<IUser>) => {
 
 export const getUser = (username: string, password: string) => {
   return UserModel.findOne({ username, password });
-}
+};
 
 export const getUserById = (id: string) => {
   return UserModel.findById(id);
-}
+};
 
 export const getUsers = () => {
   return UserModel.find({}, {password: 0});
-}
+};

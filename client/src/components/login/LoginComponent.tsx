@@ -2,15 +2,15 @@ import { useState, MouseEvent } from 'react';
 import { toast } from 'react-toastify';
 
 import './LoginComponent.css';
-import { LOGIN_URL } from '../../config';
-import { handleError, handleSuccessfulLogin } from '../../helpers/common';
+import { handleSuccessfulLogin } from '../../helpers/common';
+import { login } from '../../services/authService';
 
 export function LoginComponent() {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [isRequestInProgress, setRequestInProgress] = useState(false);
 
-  const login = async (event: MouseEvent) => {
+  const handleLogin = async (event: MouseEvent) => {
     event.preventDefault();
 
     try {
@@ -20,18 +20,7 @@ export function LoginComponent() {
 
       setRequestInProgress(true);
 
-      const loginResponse = await fetch(LOGIN_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({username: userName.trim(), password}),
-      });
-
-      await handleError(loginResponse);
-
-
-      const { token } = await loginResponse.json();
+      const { token } = await login(userName, password);
 
       handleSuccessfulLogin(token);
     } catch(error) {
@@ -56,7 +45,7 @@ export function LoginComponent() {
         onChange={(event) => setPassword(event.target.value)}
         value={password}
       />
-      <button disabled={!userName.trim() || isRequestInProgress} onClick={(event) => login(event)}>Login</button>
+      <button disabled={!userName.trim() || isRequestInProgress} onClick={(event) => handleLogin(event)}>Login</button>
     </form>
   );
 }

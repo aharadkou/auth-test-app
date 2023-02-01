@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import cors from 'cors';
 import express from 'express';
 import serverless from 'serverless-http';
@@ -15,10 +14,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors());
 
 initDb();
-
-app.get('/api/healthcheck', (_: Request, response: Response) => {
-  response.send('Api is alive!');
-});
 
 app.use('/api/users', userRouter);
 

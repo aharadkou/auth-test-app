@@ -8,11 +8,18 @@ import { handleError, handleSuccessfulLogin } from '../../helpers/common';
 export function LoginComponent() {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [isRequestInProgress, setRequestInProgress] = useState(false);
 
   const login = async (event: MouseEvent) => {
     event.preventDefault();
 
     try {
+      if (isRequestInProgress) {
+        return;
+      }
+
+      setRequestInProgress(true);
+
       const loginResponse = await fetch(LOGIN_URL, {
         method: 'POST',
         headers: {
@@ -23,11 +30,14 @@ export function LoginComponent() {
 
       await handleError(loginResponse);
 
+
       const { token } = await loginResponse.json();
 
       handleSuccessfulLogin(token);
     } catch(error) {
       toast.error(error.message);
+    } finally {
+      setRequestInProgress(false);
     }
   };
 
@@ -46,7 +56,7 @@ export function LoginComponent() {
         onChange={(event) => setPassword(event.target.value)}
         value={password}
       />
-      <button disabled={!userName.trim()} onClick={(event) => login(event)}>Login</button>
+      <button disabled={!userName.trim() || isRequestInProgress} onClick={(event) => login(event)}>Login</button>
     </form>
   );
 }

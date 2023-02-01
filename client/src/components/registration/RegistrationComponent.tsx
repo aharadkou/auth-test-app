@@ -14,11 +14,18 @@ export function RegistrationComponent() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [recaptchaToken, setRecaptchaToken] = useState('');
+  const [isRequestInProgress, setRequestInProgress] = useState(false);
 
   const onRegisterClick = async (event: MouseEvent) => {
     event.preventDefault();
 
     try {
+      if (isRequestInProgress) {
+        return;
+      }
+
+      setRequestInProgress(true);
+
       if (userName.length < MIN_USERNAME_LENGTH) {
         throw new Error(`Min username length is ${MIN_USERNAME_LENGTH}!`)
       }
@@ -46,6 +53,8 @@ export function RegistrationComponent() {
       handleSuccessfulLogin(token);
     } catch(error) {
       toast.error(error.message);
+    } finally {
+      setRequestInProgress(false);
     }
   }
 
